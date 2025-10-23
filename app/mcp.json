@@ -1,0 +1,10 @@
+{
+    "servers": [
+      {
+        "label": "freelancer-mcp",
+        "url": "http://localhost:8080/mcp",
+        "require_approval": "never"
+      }
+    ]
+  }
+  
