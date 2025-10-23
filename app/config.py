@@ -5,8 +5,6 @@ import os
 load_dotenv()
 
 class Settings(BaseModel):
-    app_host: str = os.getenv("APP_HOST", "0.0.0.0")
-    app_port: int = int(os.getenv("APP_PORT", "8080"))
     use_sandbox: bool = os.getenv("USE_SANDBOX", "true").lower() == "true"
     token_sandbox: str | None = os.getenv("FREELANCER_SANDBOX_TOKEN")
     token_prod: str | None = os.getenv("FREELANCER_TOKEN")
