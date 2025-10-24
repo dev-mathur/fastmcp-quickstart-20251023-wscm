@@ -13,6 +13,8 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+server.py
+test_mcp.py
 
 # OS-specific files
 .DS_Store
