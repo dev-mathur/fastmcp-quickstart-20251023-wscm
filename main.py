@@ -1,9 +1,8 @@
-"""
-FastMCP Acting Talent Agency Server
-"""
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastmcp import FastMCP
 
-# Create server
 mcp = FastMCP(
     name="Acting Talent Agency",
     instructions="""
@@ -13,14 +12,8 @@ mcp = FastMCP(
     """,
 )
 
-# Try to import gigs and show any errors
-try:
-    import gigs
-    print("✅ gigs module imported successfully")
-except Exception as e:
-    print(f"❌ Failed to import gigs: {e}")
-    import traceback
-    traceback.print_exc()
+from gigs import register_tools   # <-- import the registrar, not mcp
+register_tools(mcp)               # <-- attach tools to the EXACT mcp being exported
 
 if __name__ == "__main__":
     mcp.run()
