@@ -2,16 +2,12 @@ from typing import Optional
 from config import Settings
 from freelancer import Freelancer
 
-settings = Settings()
-
 def _get_client() -> Freelancer:
-    token = settings.token
-    if not token:
+    s = Settings()  # call-time: sees .env locally or real env in Cloud
+    print(f"[env] use_sandbox={s.use_sandbox} base={s.base_url} token_present={bool(s.token)} auth_style={s.auth_style}")
+    if not s.token:
         raise ValueError("Missing FREELANCER_TOKEN or FREELANCER_SANDBOX_TOKEN")
-
-    # IMPORTANT: base must match the token type
-    base = settings.base_url  # e.g., sandbox if USE_SANDBOX=true
-    return Freelancer(token=token, base_url=base)
+    return Freelancer(token=s.token, base_url=s.base_url, auth_style=s.auth_style)
 
 def register_tools(mcp):
     @mcp.tool(name="search_acting_gigs", description="Search recent acting/performance gigs on Freelancer")
