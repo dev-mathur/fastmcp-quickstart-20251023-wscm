@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Node.js
 node_modules/
 npm-debug.log*
@@ -26,6 +25,3 @@ Thumbs.db
 
 # Python cache
 __pycache__/
-=======
-.env
->>>>>>> 678634b (reset branch)
