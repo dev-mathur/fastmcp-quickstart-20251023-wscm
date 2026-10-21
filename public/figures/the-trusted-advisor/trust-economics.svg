@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" role="img" aria-label="Trust score for a new client versus an established client"><title>Trust score for a new client versus an established client</title><desc>Bars: new client 1.25 versus established client 5, roughly a fourfold difference.</desc><style>
+:root{--paper:#ffffff;--wash:#f6f6f3;--ink:#18181b;--ink2:#52525b;--line:#c9c9c2;--accent:#2b50d8;--accentwash:#eef1fd;--warn:#b4531a;--warnwash:#fbeee3}
+@media (prefers-color-scheme:dark){:root{--paper:#1a1a1d;--wash:#222226;--ink:#ececee;--ink2:#a8a8b0;--line:#3a3a40;--accent:#8aa3ff;--accentwash:#1b2140;--warn:#f0a070;--warnwash:#3a2a1f}}
+text{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;fill:var(--ink);font-size:15px}
+.t2{fill:var(--ink2);font-size:13px}.tb{font-weight:600}.ta{fill:var(--accent);font-weight:600}
+.box{fill:var(--paper);stroke:var(--line);stroke-width:1.5}
+.accent{fill:var(--accentwash);stroke:var(--accent);stroke-width:1.5}
+.warn{fill:var(--warnwash);stroke:var(--warn);stroke-width:1.5}
+.wash{fill:var(--wash);stroke:var(--line);stroke-width:1.5}
+.ln{stroke:var(--ink2);stroke-width:1.6;fill:none}.lna{stroke:var(--accent);stroke-width:2;fill:none}
+.head{fill:var(--ink2)}.headaccent{fill:var(--accent)}
+</style><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink2)"/></marker></defs><line x1="100" y1="270" x2="660" y2="270" class="ln"/><line x1="100" y1="270" x2="100" y2="40" class="ln"/><rect x="180" y="217.5" width="140" height="52.5" rx="8" class="box"/><rect x="430" y="60.0" width="140" height="210.0" rx="8" class="accent"/><text x="250" y="207.5" text-anchor="middle" class="tb"><tspan x="250" dy="0">1.25</tspan></text><text x="500" y="50.0" text-anchor="middle" class="ta"><tspan x="500" dy="0">5.0</tspan></text><text x="250" y="296" text-anchor="middle" class=""><tspan x="250" dy="0">New client</tspan></text><text x="500" y="296" text-anchor="middle" class=""><tspan x="500" dy="0">Established client</tspan></text><text x="250" y="316" text-anchor="middle" class="t2"><tspan x="250" dy="0">(5 + 3 + 2) / 8</tspan></text><text x="500" y="316" text-anchor="middle" class="t2"><tspan x="500" dy="0">(7 + 8 + 5) / 4</tspan></text><text x="640" y="60" text-anchor="end" class="ta"><tspan x="640" dy="0">about 4 times</tspan></text><text x="640" y="80" text-anchor="end" class="t2"><tspan x="640" dy="0">the trust score</tspan></text></svg>

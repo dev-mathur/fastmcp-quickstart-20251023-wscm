@@ -9,9 +9,10 @@
 //   - every chapter 1..N has its own H3 subheading, in order ("### Chapter 3: Title")
 //   - every chapter section has real content (word floor per chapter)
 //   - every pull quote is 15 words or fewer
+//   - every figure (![alt](/figures/...)) has alt text and its file exists in public/
 //   - each chapter ends with a "Key takeaway" note; recall questions exist
 
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, basename, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parse as parseYaml } from 'yaml';
@@ -191,6 +192,12 @@ for (const name of files) {
   }
 
   checkQuotes(file, body, bodyOffset);
+
+  for (const match of body.matchAll(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g)) {
+    const [, alt, src] = match;
+    if (!alt.trim()) err(file, `figure ${src} needs alt text`);
+    if (src.startsWith('/') && !existsSync(join(root, 'public', src))) err(file, `figure file not found: public${src}`);
+  }
 
   // Structure
   const words = body.split(/\s+/).filter(Boolean).length;

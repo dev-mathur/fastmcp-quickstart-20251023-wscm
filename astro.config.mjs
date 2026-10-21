@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { unified } from '@astrojs/markdown-remark';
 import rehypeCallouts from './plugins/rehype-callouts.mjs';
+import rehypeFigures from './plugins/rehype-figures.mjs';
 
 // GitHub Pages project site: https://<user>.github.io/<repo>/
 // The deploy workflow can override both values with SITE_URL and BASE_PATH.
@@ -14,6 +15,6 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [sitemap()],
   markdown: {
-    processor: unified({ rehypePlugins: [rehypeCallouts] }),
+    processor: unified({ rehypePlugins: [rehypeCallouts, [rehypeFigures, { base }]] }),
   },
 });
