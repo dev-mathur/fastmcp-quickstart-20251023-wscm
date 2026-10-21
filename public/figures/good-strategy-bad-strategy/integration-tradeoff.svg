@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" role="img" aria-label="Resources versus integration"><title>Resources versus integration</title><desc>A downward curve: the more strategic resources, the less tight integration of actions is needed for a given challenge.</desc><style>
+:root{--paper:#ffffff;--wash:#f6f6f3;--ink:#18181b;--ink2:#52525b;--line:#c9c9c2;--accent:#2b50d8;--accentwash:#eef1fd;--warn:#b4531a;--warnwash:#fbeee3}
+@media (prefers-color-scheme:dark){:root{--paper:#1a1a1d;--wash:#222226;--ink:#ececee;--ink2:#a8a8b0;--line:#3a3a40;--accent:#8aa3ff;--accentwash:#1b2140;--warn:#f0a070;--warnwash:#3a2a1f}}
+text{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;fill:var(--ink);font-size:15px}
+.t2{fill:var(--ink2);font-size:13px}.tb{font-weight:600}.ta{fill:var(--accent);font-weight:600}
+.box{fill:var(--paper);stroke:var(--line);stroke-width:1.5}
+.accent{fill:var(--accentwash);stroke:var(--accent);stroke-width:1.5}
+.warn{fill:var(--warnwash);stroke:var(--warn);stroke-width:1.5}
+.wash{fill:var(--wash);stroke:var(--line);stroke-width:1.5}
+.ln{stroke:var(--ink2);stroke-width:1.6;fill:none}.lna{stroke:var(--accent);stroke-width:2;fill:none}
+.head{fill:var(--ink2)}.headaccent{fill:var(--accent)}
+</style><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink2)"/></marker></defs><line x1="80" y1="30" x2="80" y2="250" class="ln"/><line x1="80" y1="250" x2="680" y2="250" class="ln"/><path d="M110 50 Q 200 235 650 238" class="lna" fill="none"/><text x="210" y="60" text-anchor="start" class="t2"><tspan x="210" dy="0">Rich in resources:</tspan><tspan x="210" dy="19">loose coordination suffices</tspan></text><text x="430" y="178" text-anchor="start" class="t2"><tspan x="430" dy="0">Few resources:</tspan><tspan x="430" dy="19">tight integration needed</tspan></text><text x="380" y="282" text-anchor="middle" class="tb"><tspan x="380" dy="0">Integration of actions (tighter →)</tspan></text><text transform="translate(26 140) rotate(-90)" text-anchor="middle" class="tb">Strategic resources</text></svg>
