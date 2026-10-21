@@ -906,6 +906,22 @@ a.chip:hover {
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+/* Chapter summaries: each chapter is an H3 under the "Chapter Summaries" (or Part) H2 */
+.prose h2 + h3 {
+  margin-top: 1.2em;
+}
+.prose h3 {
+  scroll-margin-top: calc(var(--header-h) + 24px);
+}
+.prose h3 ~ h3,
+.prose blockquote.takeaway ~ h3 {
+  padding-top: 1.5em;
+  border-top: 1px solid var(--line);
+}
+.prose h2 {
+  scroll-margin-top: calc(var(--header-h) + 24px);
 }
 .prose a {
   color: var(--accent);
@@ -979,8 +995,8 @@ a.chip:hover {
   color: var(--ink-3);
 }
 
-/* "Remember this": the one thing to retain from a section */
-.prose blockquote.remember {
+/* "Key takeaway": the one thing to retain from a chapter */
+.prose blockquote.takeaway {
   margin: 2em 0 0;
   padding: 16px 20px;
   border-left: 3px solid var(--accent);
@@ -989,10 +1005,10 @@ a.chip:hover {
   font-size: 0.92em;
   line-height: 1.55;
 }
-.prose blockquote.remember p {
+.prose blockquote.takeaway p {
   margin: 0;
 }
-.prose blockquote.remember strong:first-child {
+.prose blockquote.takeaway strong:first-child {
   color: var(--accent);
 }
 

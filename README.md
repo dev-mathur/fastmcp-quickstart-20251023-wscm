@@ -1,6 +1,6 @@
 # DevStack
 
-A Substack-style reading site where each book becomes one long, detailed article. Built with Astro, deployed to GitHub Pages.
+A Substack-style reading site where each book becomes one long, chapter-by-chapter study article. Built with Astro, deployed to GitHub Pages.
 
 ## Run it
 ```bash

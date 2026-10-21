@@ -6,9 +6,10 @@
 //   - article title equals the book title
 //   - frontmatter fields, topic exists in taxonomy.json, tags are kebab-case
 //   - file name is a kebab-case slug, and no two files cover the same book
-//   - every chapter 1..N is mentioned by number (so no chapter is silently skipped)
+//   - every chapter 1..N has its own H3 subheading, in order ("### Chapter 3: Title")
+//   - every chapter section has real content (word floor per chapter)
 //   - every pull quote is 15 words or fewer
-//   - the article has "Remember this" notes and recall questions
+//   - each chapter ends with a "Key takeaway" note; recall questions exist
 
 import { readdirSync, readFileSync } from 'node:fs';
 import { join, basename, dirname } from 'node:path';
@@ -21,6 +22,7 @@ const taxonomy = JSON.parse(readFileSync(join(root, 'src/data/taxonomy.json'), '
 const topicSlugs = new Set(taxonomy.topics.map((topic) => topic.slug));
 
 const MAX_QUOTE_WORDS = 15;
+const MIN_CHAPTER_WORDS = 100;
 const KEBAB = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 const errors = [];
@@ -60,7 +62,38 @@ function mentionedUnits(body, unit) {
   return found;
 }
 
-/** Pull quotes: blockquotes that are not "Remember this" callouts. Attribution lines starting with a dash are ignored. */
+/** Chapter sections: each "### Chapter N: Title" heading (a range like "Chapters 4-5" counts both) up to the next H2 or H3. */
+function chapterSections(body, unit) {
+  const lines = body.split('\n');
+  const sections = [];
+  let current = null;
+  for (const line of lines) {
+    const heading = line.match(/^(#{2,3})\s+(.*)$/);
+    if (heading) {
+      if (current) sections.push(current);
+      current = null;
+      if (heading[1] === '###') {
+        const numbers = [...mentionedUnits(heading[2], unit)];
+        if (numbers.length > 0) current = { heading: heading[2].trim(), numbers, text: [] };
+      }
+      continue;
+    }
+    if (current) current.text.push(line);
+  }
+  if (current) sections.push(current);
+  return sections.map((section) => {
+    const text = section.text.join('\n');
+    const words = text
+      .split('\n')
+      .filter((line) => !/^\s*>/.test(line))
+      .join(' ')
+      .split(/\s+/)
+      .filter(Boolean).length;
+    return { ...section, words, hasTakeaway: /^>\s*\*\*Key takeaway/im.test(text) };
+  });
+}
+
+/** Pull quotes: blockquotes that are not "Key takeaway" callouts. Attribution lines starting with a dash are ignored. */
 function checkQuotes(file, body, bodyOffset) {
   const lines = body.split('\n');
   let block = [];
@@ -72,8 +105,8 @@ function checkQuotes(file, body, bodyOffset) {
       .split(/\n\s*\n/)
       .map((paragraph) => paragraph.replace(/\s+/g, ' ').trim())
       .filter(Boolean);
-    const isRemember = /^\*\*Remember/i.test(paragraphs[0] ?? '');
-    if (!isRemember) {
+    const isTakeaway = /^\*\*Key takeaway/i.test(paragraphs[0] ?? '');
+    if (!isTakeaway) {
       const quoted = paragraphs.filter((paragraph) => !/^[—–-]\s/.test(paragraph)).join(' ');
       const words = quoted.split(/\s+/).filter(Boolean).length;
       if (words > MAX_QUOTE_WORDS) {
@@ -136,15 +169,25 @@ for (const name of files) {
 
   if (/^# /m.test(body)) warn(file, 'body contains an H1; the page title already comes from frontmatter');
 
-  // Chapter coverage
+  // Chapter coverage: every chapter needs its own H3 subheading, in order, with real content.
   if (Number.isInteger(data.chapters)) {
     const unit = data.unit ?? 'Chapter';
-    const found = mentionedUnits(body, unit);
+    const sections = chapterSections(body, unit);
+    const covered = new Set(sections.flatMap((section) => section.numbers));
     const missing = [];
-    for (let n = 1; n <= data.chapters; n++) if (!found.has(n)) missing.push(n);
+    for (let n = 1; n <= data.chapters; n++) if (!covered.has(n)) missing.push(n);
     if (missing.length > 0) {
-      err(file, `${unit}s not mentioned by number: ${missing.join(', ')} (of ${data.chapters})`);
+      err(file, `no "### ${unit} N" subheading for ${unit.toLowerCase()}s: ${missing.join(', ')} (of ${data.chapters})`);
     }
+    const order = sections.flatMap((section) => section.numbers);
+    if (order.some((n, i) => i > 0 && n < order[i - 1])) warn(file, `${unit.toLowerCase()} subheadings are out of order`);
+    for (const section of sections) {
+      if (section.words < MIN_CHAPTER_WORDS) {
+        warn(file, `"${section.heading}" is only ${section.words} words; chapter summaries should be detailed (aim for ${MIN_CHAPTER_WORDS}+)`);
+      }
+      if (!section.hasTakeaway) warn(file, `"${section.heading}" has no "Key takeaway" note`);
+    }
+    if (sections.length > 0 && !/^## /m.test(body)) warn(file, 'no H2 headings; group chapters under "## Chapter Summaries" or a Part heading');
   }
 
   checkQuotes(file, body, bodyOffset);
@@ -152,13 +195,12 @@ for (const name of files) {
   // Structure
   const words = body.split(/\s+/).filter(Boolean).length;
   const h2 = (body.match(/^## /gm) ?? []).length;
-  const remember = (body.match(/^>\s*\*\*Remember/gim) ?? []).length;
   const questions = (body.match(/<details>/g) ?? []).length;
 
   if (words < 800) err(file, `article is only ${words} words; expected a long-form article`);
   else if (words < 1500) warn(file, `article is ${words} words, which is short for a full book`);
-  if (h2 < 4) warn(file, `only ${h2} H2 sections; the contents rail works best with 6 or more`);
-  if (remember === 0) warn(file, 'no "Remember this" notes found');
+  if (h2 < 3) warn(file, `only ${h2} H2 sections; expected Overview, Chapter Summaries (or Parts), Themes and Analysis, Test Yourself`);
+  if (!/^## Overview/m.test(body)) warn(file, 'no "## Overview" section');
   if (questions < 8) warn(file, `only ${questions} recall questions (<details> blocks); aim for 12-20`);
 }
 

@@ -1,6 +1,6 @@
 // Turns two markdown conventions into styled blocks, with no extra dependencies.
 //
-//   > **Remember this.** One to three sentences.   -> <blockquote class="remember">
+//   > **Key takeaway.** One to three sentences.    -> <blockquote class="takeaway">
 //   > "A short quote." <newline> — p. 38           -> <blockquote class="pullquote">
 //
 // Every other blockquote is left alone.
@@ -27,10 +27,10 @@ export default function rehypeCallouts() {
 
       const paragraph = firstElement(node);
       const lead = paragraph?.tagName === 'p' ? firstElement(paragraph) : undefined;
-      const isRemember =
-        lead?.tagName === 'strong' && /^remember/i.test(textOf(lead).trim());
+      const isTakeaway =
+        lead?.tagName === 'strong' && /^key takeaway/i.test(textOf(lead).trim());
 
-      const className = isRemember ? 'remember' : 'pullquote';
+      const className = isTakeaway ? 'takeaway' : 'pullquote';
       const existing = node.properties?.className ?? [];
       node.properties = {
         ...node.properties,

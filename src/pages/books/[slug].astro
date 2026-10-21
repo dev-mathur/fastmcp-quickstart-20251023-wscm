@@ -62,6 +62,7 @@ const related = [
           <div class="byline-text">
             <span class="byline-book">by {data.book.author}</span>
             <div class="meta">
+              <span>{data.chapters} {data.unit.toLowerCase()}s</span>
               <span>{minutes} min read</span>
               <span>{formatDate(data.publishedAt)}</span>
               {data.book.year && <span>First published {data.book.year}</span>}

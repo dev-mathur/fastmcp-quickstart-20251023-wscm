@@ -13,8 +13,10 @@ The full multi-agent operating prompt is in `docs/agent-prompt.md`. Read it at t
 - Every internal link goes through `url()` from `src/lib/paths.ts` (site lives under `/devstack/`).
 - Topics come from `src/data/taxonomy.json`; navigation is generated from content. A new book needs no code changes.
 - Article `title` must equal `book.title` exactly; the angle goes in `subtitle`.
-- Articles: `src/content/books/<kebab-slug>.md`, no H1, every chapter mentioned by number, pull quotes 15 words or fewer,
-  `> **Remember this.** ...` at the end of each section, recall questions as `<details><summary>` blocks.
+- Article structure: `## Overview`, `## Chapter Summaries` (or one `## Part ...` H2 per part), `## Themes and Analysis`, `## Test Yourself`.
+- Every chapter has its own `### Chapter N: Exact Title` subheading, in book order, with a detailed present-tense summary
+  and a closing `> **Key takeaway.** ...`. The validator fails the build on a missing chapter heading and warns under 100 words.
+- Articles: `src/content/books/<kebab-slug>.md`, no H1, no H4, pull quotes 15 words or fewer, recall questions as `<details><summary>` blocks.
 - Never commit `work/`, source PDFs/EPUBs, or extracted chapter text.
 - Sample articles carry `sample: true`. Delete them after the first real ingest.
 - A change is done only when `npm run validate` and `npm run build` pass.
