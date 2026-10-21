@@ -21,7 +21,7 @@ const minutes = readingMinutes(book.body);
     <p class="row-sub">{data.subtitle}</p>
     <div class="meta">
       {showTopic && topic && <a class="chip" href={url(`/topics/${topic.slug}/`)}>{topic.name}</a>}
-      <span class="meta-strong">{data.book.title} by {data.book.author}</span>
+      <span class="meta-strong">by {data.book.author}</span>
       <span>{minutes} min read</span>
       <span>{formatDate(data.publishedAt)}</span>
       {data.sample && <span class="badge">Sample</span>}

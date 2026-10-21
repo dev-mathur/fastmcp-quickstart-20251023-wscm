@@ -3,6 +3,7 @@
 // Errors fail the build. Warnings are printed but do not.
 //
 // Checks:
+//   - article title equals the book title
 //   - frontmatter fields, topic exists in taxonomy.json, tags are kebab-case
 //   - file name is a kebab-case slug, and no two files cover the same book
 //   - every chapter 1..N is mentioned by number (so no chapter is silently skipped)
@@ -116,6 +117,9 @@ for (const name of files) {
     if (data[field] === undefined || data[field] === null || data[field] === '') err(file, `frontmatter is missing "${field}"`);
   }
   if (!data.book?.title || !data.book?.author) err(file, 'frontmatter needs book.title and book.author');
+  if (data.title && data.book?.title && data.title.trim() !== data.book.title.trim()) {
+    err(file, `title "${data.title}" must be exactly the book title "${data.book.title}" (put the angle in the subtitle)`);
+  }
   if (data.publishedAt && Number.isNaN(new Date(data.publishedAt).getTime())) err(file, 'publishedAt is not a valid date');
   if (data.topic && !topicSlugs.has(data.topic)) {
     err(file, `topic "${data.topic}" is not in src/data/taxonomy.json (known: ${[...topicSlugs].join(', ')})`);

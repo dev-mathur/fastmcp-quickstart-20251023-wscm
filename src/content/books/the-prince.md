@@ -1,6 +1,6 @@
 ---
-title: "What Power Actually Takes"
-subtitle: "A chapter-by-chapter reading of Machiavelli's The Prince, and why it is less a manual for tyrants than a book about how things really work."
+title: "The Prince"
+subtitle: "Machiavelli's twenty-six chapters, read closely: less a manual for tyrants than a book about what power actually takes."
 publishedAt: 2026-10-19
 book:
   title: "The Prince"

@@ -12,6 +12,7 @@ The full multi-agent operating prompt is in `docs/agent-prompt.md`. Read it at t
 ## Rules that must not break
 - Every internal link goes through `url()` from `src/lib/paths.ts` (site lives under `/devstack/`).
 - Topics come from `src/data/taxonomy.json`; navigation is generated from content. A new book needs no code changes.
+- Article `title` must equal `book.title` exactly; the angle goes in `subtitle`.
 - Articles: `src/content/books/<kebab-slug>.md`, no H1, every chapter mentioned by number, pull quotes 15 words or fewer,
   `> **Remember this.** ...` at the end of each section, recall questions as `<details><summary>` blocks.
 - Never commit `work/`, source PDFs/EPUBs, or extracted chapter text.

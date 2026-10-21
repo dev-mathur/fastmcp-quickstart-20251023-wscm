@@ -1,6 +1,6 @@
 ---
-title: "Win Before the Fight Begins"
-subtitle: "A chapter-by-chapter reading of Sun Tzu's The Art of War, and why its real subject is preparation, not combat."
+title: "The Art of War"
+subtitle: "Sun Tzu's thirteen chapters, read closely: why its real subject is preparing to win before the fight begins, not combat."
 publishedAt: 2026-10-20
 book:
   title: "The Art of War"

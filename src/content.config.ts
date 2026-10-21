@@ -8,7 +8,7 @@ const books = defineCollection({
   loader: glob({ base: './src/content/books', pattern: '**/*.md' }),
   schema: z.object({
     // The article
-    title: z.string().min(8),
+    title: z.string().min(1), // must equal book.title (enforced by the validator)
     subtitle: z.string().min(20),
     publishedAt: z.coerce.date(),
 

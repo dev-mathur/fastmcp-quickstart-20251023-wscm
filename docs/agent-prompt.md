@@ -119,6 +119,7 @@ Mission: turn one PDF or EPUB into one finished article on the site, with its pa
 
 Step 1. Intake
 - Find the attached file. Work on a copy at `work/<slug>/source.<ext>`. Never edit the upload and never commit the source file.
+- The article title is always the exact title of the book (as printed, without a subtitle). The angle goes in the frontmatter `subtitle`, never in `title`. The validator fails the build if they differ.
 - Pick the slug (see the Taxonomy and IA section) and note the book title, author, edition, translator, and year from the file's metadata or its first pages.
 
 Step 2. Extract and check
@@ -161,11 +162,11 @@ Write `src/content/books/<slug>.md`. It is one article, not a package of summari
 Frontmatter (all fields are validated):
 ```yaml
 ---
-title: "A specific promise, not 'Summary of X'"
-subtitle: "One line naming the book and author and stating the payoff."
+title: "The Book Title"   # exactly the book's title, no "Summary of", no rewording
+subtitle: "One line stating the author and the payoff: what the reader walks away with."
 publishedAt: 2026-01-01      # today's date
 book:
-  title: "The Book Title"
+  title: "The Book Title"   # same as the article title
   author: "Author Name"
   year: "2018"
   translator: "..."          # only if relevant
