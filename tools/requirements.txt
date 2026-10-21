@@ -1,0 +1,13 @@
+# Ingestion tooling for tools/extract.py
+#   python3 -m venv tools/.venv && source tools/.venv/bin/activate
+#   pip install -r tools/requirements.txt
+pymupdf>=1.24
+pymupdf4llm>=0.0.17
+
+# Optional backends (install only if the default output is poor)
+#   docling      tables, code, and equations in technical books
+#   marker-pdf   complex layouts
+#   ocrmypdf     scanned PDFs (also needs tesseract on the system)
+# docling
+# marker-pdf
+# ocrmypdf

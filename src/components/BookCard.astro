@@ -1,0 +1,31 @@
+---
+import Cover from './Cover.astro';
+import { readingMinutes, topicBySlug, type Book } from '../lib/books';
+import { url } from '../lib/paths';
+
+interface Props {
+  book: Book;
+}
+
+const { book } = Astro.props;
+const { data } = book;
+const topic = topicBySlug(data.topic);
+const href = url(`/books/${book.id}/`);
+---
+
+<article class="card">
+  <a class="card-cover" href={href} tabindex="-1" aria-hidden="true">
+    <Cover
+      title={data.book.title}
+      author={data.book.author}
+      hue={topic?.hue ?? 212}
+      slug={book.id}
+    />
+  </a>
+  <h3 class="card-title"><a href={href}>{data.book.title}</a></h3>
+  <p class="card-author">{data.book.author}</p>
+  <div class="meta">
+    {topic && <a class="chip" href={url(`/topics/${topic.slug}/`)}>{topic.name}</a>}
+    <span>{readingMinutes(book.body)} min read</span>
+  </div>
+</article>

@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/paths';
+---
+
+<Base title="Page not found" description="That page does not exist.">
+  <div class="wrap">
+    <div class="plain">
+      <h1>That page isn't here</h1>
+      <p class="hero-lede">
+        The link may be old, or the article may have been renamed. Try the library or search.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href={url('/library/')}>Go to the library</a>
+        <a class="btn btn-quiet" href={url('/search/')}>Search</a>
+      </div>
+    </div>
+  </div>
+</Base>

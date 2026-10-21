@@ -1,0 +1,8 @@
+{
+  "_comment": "Static navigation. Topic links are generated from taxonomy.json and book counts, so the ingestion agent rarely needs to edit this file.",
+  "primary": [
+    { "label": "Library", "href": "/library/" },
+    { "label": "About", "href": "/about/" }
+  ],
+  "cta": { "label": "Subscribe", "href": "/rss.xml" }
+}

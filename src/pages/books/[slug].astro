@@ -1,0 +1,152 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import BookRow from '../../components/BookRow.astro';
+import Cover from '../../components/Cover.astro';
+import Toc from '../../components/Toc.astro';
+import { formatDate, getBooks, readingMinutes, topicBySlug } from '../../lib/books';
+import { url } from '../../lib/paths';
+
+export async function getStaticPaths() {
+  const books = await getBooks();
+  return books.map((book) => ({ params: { slug: book.id }, props: { book } }));
+}
+
+const { book } = Astro.props;
+const { data } = book;
+const { Content, headings } = await render(book);
+
+const topic = topicBySlug(data.topic);
+const minutes = readingMinutes(book.body);
+
+// Same-topic books first, then the newest others, up to two.
+const others = (await getBooks()).filter((other) => other.id !== book.id);
+const related = [
+  ...others.filter((other) => other.data.topic === data.topic),
+  ...others.filter((other) => other.data.topic !== data.topic),
+].slice(0, 2);
+---
+
+<Base
+  title={data.title}
+  description={data.subtitle}
+  type="article"
+>
+  <div class="progress" aria-hidden="true"><i data-progress></i></div>
+
+  <div class="wrap article-layout">
+    <aside class="rail" aria-label="Contents">
+      <div class="rail-inner">
+        <Toc headings={headings} />
+      </div>
+    </aside>
+
+    <article class="article-main">
+      <header class="article-head">
+        {
+          topic && (
+            <a class="chip" href={url(`/topics/${topic.slug}/`)}>{topic.name}</a>
+          )
+        }
+        <h1 class="article-title">{data.title}</h1>
+        <p class="article-sub">{data.subtitle}</p>
+
+        <div class="byline">
+          <Cover
+            title={data.book.title}
+            author={data.book.author}
+            hue={topic?.hue ?? 212}
+            slug={book.id}
+            size="sm"
+          />
+          <div class="byline-text">
+            <span class="byline-book">{data.book.title} by {data.book.author}</span>
+            <div class="meta">
+              <span>{minutes} min read</span>
+              <span>{formatDate(data.publishedAt)}</span>
+              {data.book.year && <span>First published {data.book.year}</span>}
+            </div>
+          </div>
+        </div>
+
+        {
+          data.sample && (
+            <p class="sample-note">
+              This is a sample article that ships with the starter site. It covers a public-domain
+              book and was written to show the format. Delete it once your first real book is in.
+            </p>
+          )
+        }
+
+        <details class="toc-mobile">
+          <summary>In this article</summary>
+          <Toc headings={headings} />
+        </details>
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <footer class="article-foot">
+        <div class="next-box">
+          <h2>Keep reading</h2>
+          <p>More books from the stack.</p>
+          <a class="btn btn-primary" href={url('/library/')}>Browse the library</a>
+        </div>
+        {
+          related.length > 0 && (
+            <div style="margin-top: 40px">
+              {related.map((other) => (
+                <BookRow book={other} />
+              ))}
+            </div>
+          )
+        }
+      </footer>
+    </article>
+  </div>
+
+  <script>
+    // Reading progress bar.
+    const bar = document.querySelector<HTMLElement>('[data-progress]');
+    const prose = document.querySelector<HTMLElement>('.prose');
+    function updateProgress() {
+      if (!bar || !prose) return;
+      const rect = prose.getBoundingClientRect();
+      const total = rect.height - window.innerHeight * 0.6;
+      const done = Math.min(Math.max(-rect.top + 80, 0), Math.max(total, 1));
+      bar.style.width = `${(done / Math.max(total, 1)) * 100}%`;
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+
+    // Highlight the current section in the contents rail.
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-toc] a'));
+    const targets = links
+      .map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1))))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (targets.length > 0 && 'IntersectionObserver' in window) {
+      const visible = new Set<string>();
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) visible.add(entry.target.id);
+            else visible.delete(entry.target.id);
+          }
+          const current = targets.find((el) => visible.has(el.id));
+          if (!current) return;
+          for (const link of links) {
+            const active = decodeURIComponent(link.hash.slice(1)) === current.id;
+            if (active) link.setAttribute('aria-current', 'true');
+            else link.removeAttribute('aria-current');
+          }
+        },
+        { rootMargin: '-80px 0px -65% 0px' },
+      );
+      targets.forEach((el) => observer.observe(el));
+    }
+  </script>
+</Base>

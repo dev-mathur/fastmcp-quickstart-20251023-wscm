@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/paths';
+---
+
+<Base title="About" description="What DevStack is and how each article is written.">
+  <div class="wrap">
+    <div class="plain">
+      <h1>About DevStack</h1>
+      <div class="prose">
+        <p>
+          DevStack is a personal reading library. Each book becomes one long article that follows
+          the author's argument from the first chapter to the last, with enough detail that you can
+          answer specific questions about any chapter without opening the book.
+        </p>
+
+        <h2>What is in an article</h2>
+        <p>Every article is built the same way, so you always know where to look.</p>
+        <ul>
+          <li>A short hook and the book's thesis in plain words.</li>
+          <li>The whole argument in one pass, so you hold the shape before the detail.</li>
+          <li>
+            A walkthrough in order, with the chapter number named inline so you can find the
+            passage later.
+          </li>
+          <li>A "Remember this" note closing each section.</li>
+          <li>Where the book is strong, where it is thin, and what to do with it.</li>
+          <li>Recall questions at the end. Try them before you open the answers.</li>
+        </ul>
+        <p>
+          Claims are attributed to the author. Commentary is kept separate and labeled, so you
+          always know whose view you are reading.
+        </p>
+
+        <h2>How to read one</h2>
+        <p>
+          Read the hook and the one-pass overview first. Then work through the walkthrough one
+          section at a time. Wait a day, then answer the recall questions from memory and open
+          only the answers you missed.
+        </p>
+
+        <h2 id="add-a-book">How books are added</h2>
+        <p>
+          Books are added through a chat agent that works on this site's repository. The steps are
+          the same each time:
+        </p>
+        <ol>
+          <li>Attach the PDF or EPUB and ask the agent to ingest it.</li>
+          <li>The agent extracts the text, splits it by chapter, and checks that nothing was lost.</li>
+          <li>It writes the article and adds the book's page, topic, and navigation entries.</li>
+          <li>A validator confirms every chapter is covered and every quote is short.</li>
+          <li>The agent publishes the site and reports what changed.</li>
+        </ol>
+        <p>
+          Want to follow along? <a href={url('/rss.xml')}>Subscribe by RSS</a>, or
+          <a href={url('/library/')}>browse the library</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</Base>

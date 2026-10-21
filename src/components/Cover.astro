@@ -1,0 +1,26 @@
+---
+import { coverVariant } from '../lib/books';
+
+interface Props {
+  title: string;
+  author: string;
+  hue: number;
+  slug: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { title, author, hue, slug, size = 'md' } = Astro.props;
+const variant = coverVariant(slug);
+const long = title.length > 26;
+---
+
+<div
+  class:list={['cover', `cover--${variant}`, `cover--${size}`, { 'cover--long': long }]}
+  style={`--h:${hue}`}
+  aria-hidden="true"
+>
+  <div class="cover-body">
+    <span class="cover-title">{title}</span>
+    <span class="cover-author">{author}</span>
+  </div>
+</div>

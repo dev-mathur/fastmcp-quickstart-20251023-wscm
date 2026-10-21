@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/paths';
+---
+
+<Base title="Search" description="Search every article on DevStack.">
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Search</h1>
+      <p>Search by book, author, topic, or anything mentioned in an article.</p>
+    </header>
+
+    <input
+      class="search-field"
+      type="search"
+      placeholder="Try a book title or an idea"
+      aria-label="Search the library"
+      autocomplete="off"
+      data-search-input
+      data-src={url('/search.json')}
+    />
+    <p class="search-status" data-search-status aria-live="polite"></p>
+    <div class="search-results" data-search-results></div>
+  </div>
+
+  <script>
+    interface Entry {
+      title: string;
+      subtitle: string;
+      book: string;
+      author: string;
+      topic: string;
+      tags: string[];
+      minutes: number;
+      url: string;
+      text: string;
+    }
+
+    const input = document.querySelector<HTMLInputElement>('[data-search-input]')!;
+    const status = document.querySelector<HTMLElement>('[data-search-status]')!;
+    const results = document.querySelector<HTMLElement>('[data-search-results]')!;
+    let entries: Entry[] = [];
+
+    function score(entry: Entry, terms: string[]): number {
+      const head = `${entry.title} ${entry.book} ${entry.author} ${entry.topic} ${entry.tags.join(' ')}`.toLowerCase();
+      const subtitle = entry.subtitle.toLowerCase();
+      const text = entry.text.toLowerCase();
+      let total = 0;
+      for (const term of terms) {
+        const inHead = head.includes(term);
+        const inSub = subtitle.includes(term);
+        const inText = text.includes(term);
+        if (!inHead && !inSub && !inText) return 0;
+        total += (inHead ? 10 : 0) + (inSub ? 4 : 0) + (inText ? 1 : 0);
+      }
+      return total;
+    }
+
+    function snippet(entry: Entry, term: string): string {
+      const at = entry.text.toLowerCase().indexOf(term);
+      if (at < 0) return entry.subtitle;
+      const start = Math.max(0, at - 70);
+      return `${start > 0 ? '…' : ''}${entry.text.slice(start, at + 150)}…`;
+    }
+
+    function escapeHtml(value: string): string {
+      return value.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
+    }
+
+    function render() {
+      const terms = input.value.toLowerCase().split(/\s+/).filter(Boolean);
+      if (terms.length === 0) {
+        status.textContent = `${entries.length} articles in the library.`;
+        results.innerHTML = '';
+        return;
+      }
+      const hits = entries
+        .map((entry) => ({ entry, points: score(entry, terms) }))
+        .filter((hit) => hit.points > 0)
+        .sort((a, b) => b.points - a.points);
+
+      status.textContent =
+        hits.length === 0
+          ? 'No articles match that search.'
+          : `${hits.length} ${hits.length === 1 ? 'article' : 'articles'} found.`;
+
+      results.innerHTML = hits
+        .map(
+          ({ entry }) => `
+          <article class="row" style="grid-template-columns: minmax(0, 1fr)">
+            <div class="row-main">
+              <h3 class="row-title"><a href="${entry.url}">${escapeHtml(entry.title)}</a></h3>
+              <p class="row-sub">${escapeHtml(snippet(entry, terms[0]))}</p>
+              <div class="meta">
+                <span class="meta-strong">${escapeHtml(entry.book)} by ${escapeHtml(entry.author)}</span>
+                <span>${escapeHtml(entry.topic)}</span>
+                <span>${entry.minutes} min read</span>
+              </div>
+            </div>
+          </article>`,
+        )
+        .join('');
+    }
+
+    fetch(input.dataset.src!)
+      .then((response) => response.json())
+      .then((data: Entry[]) => {
+        entries = data;
+        const initial = new URLSearchParams(location.search).get('q');
+        if (initial) input.value = initial;
+        render();
+      })
+      .catch(() => {
+        status.textContent = 'Search is unavailable right now. Try again in a moment.';
+      });
+
+    input.addEventListener('input', render);
+  </script>
+</Base>

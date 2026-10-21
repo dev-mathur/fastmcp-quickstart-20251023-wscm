@@ -1,0 +1,53 @@
+{
+  "_comment": "Topics are the site's taxonomy. A topic appears in navigation only when it has at least one published book. hue is 0-360 and colors that topic's book covers.",
+  "topics": [
+    {
+      "slug": "strategy",
+      "name": "Strategy",
+      "description": "How to compete, plan, and decide when the other side is also thinking.",
+      "hue": 212
+    },
+    {
+      "slug": "power",
+      "name": "Politics and power",
+      "description": "How institutions, rulers, and leaders gain, use, and lose authority.",
+      "hue": 14
+    },
+    {
+      "slug": "money",
+      "name": "Money and markets",
+      "description": "Investing, finance, economics, and how people behave around money.",
+      "hue": 152
+    },
+    {
+      "slug": "engineering",
+      "name": "Engineering",
+      "description": "Software, systems, data, and the craft of building things that last.",
+      "hue": 262
+    },
+    {
+      "slug": "habits",
+      "name": "Habits and productivity",
+      "description": "Behavior change, focus, and getting meaningful work done.",
+      "hue": 36
+    },
+    {
+      "slug": "mind",
+      "name": "Psychology and philosophy",
+      "description": "How people think, decide, and live well.",
+      "hue": 330
+    },
+    {
+      "slug": "business",
+      "name": "Business and leadership",
+      "description": "Building companies, running teams, and managing people.",
+      "hue": 190
+    },
+    {
+      "slug": "history",
+      "name": "History and science",
+      "description": "How we got here and how the world works.",
+      "hue": 95
+    }
+  ]
+}

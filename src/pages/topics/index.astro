@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getActiveTopics } from '../../lib/books';
+import { url } from '../../lib/paths';
+
+const topics = await getActiveTopics();
+---
+
+<Base title="Topics" description="Browse DevStack by subject.">
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Topics</h1>
+      <p>Browse the library by subject.</p>
+    </header>
+
+    <div class="topic-grid">
+      {
+        topics.map((topic) => (
+          <a class="topic-card" href={url(`/topics/${topic.slug}/`)}>
+            <h2>{topic.name}</h2>
+            <p>{topic.description}</p>
+            <span class="count">{topic.count} {topic.count === 1 ? 'book' : 'books'}</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Base>

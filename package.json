@@ -1,0 +1,22 @@
+{
+  "name": "devstack",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/validate-content.mjs && astro build",
+    "preview": "astro preview",
+    "validate": "node scripts/validate-content.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.3",
+    "@astrojs/rss": "^4.0.19",
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.4.1",
+    "yaml": "^2.8.1"
+  }
+}

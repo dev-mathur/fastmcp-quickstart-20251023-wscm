@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import BookRow from '../components/BookRow.astro';
+import Cover from '../components/Cover.astro';
+import { getActiveTopics, getBooks, topicBySlug } from '../lib/books';
+import { site } from '../data/site';
+import { url } from '../lib/paths';
+
+const books = await getBooks();
+const topics = await getActiveTopics();
+const featured = books.find((book) => book.data.featured) ?? books[0];
+const featuredTopic = featured ? topicBySlug(featured.data.topic) : undefined;
+---
+
+<Base>
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <h1>{site.tagline}</h1>
+        <p class="hero-lede">{site.description}</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href={url('/library/')}>Browse the library</a>
+          <a class="btn btn-quiet" href={url('/about/')}>How it works</a>
+        </div>
+      </div>
+      {
+        featured && (
+          <a class="hero-book" href={url(`/books/${featured.id}/`)}>
+            <Cover
+              title={featured.data.book.title}
+              author={featured.data.book.author}
+              hue={featuredTopic?.hue ?? 212}
+              slug={featured.id}
+              size="lg"
+            />
+            <p class="hero-book-caption">
+              <strong>{featured.data.title}</strong>
+              Latest from the stack
+            </p>
+          </a>
+        )
+      }
+    </section>
+
+    <div class="home-grid">
+      <section aria-labelledby="latest-heading">
+        <div class="section-head">
+          <h2 id="latest-heading">Latest</h2>
+          <a href={url('/library/')}>See all {books.length}</a>
+        </div>
+        {
+          books.length > 0 ? (
+            <div>
+              {books.slice(0, 10).map((book) => (
+                <BookRow book={book} />
+              ))}
+            </div>
+          ) : (
+            <p class="empty">
+              Nothing here yet. Add a book with the ingestion agent and it will show up on this page.
+            </p>
+          )
+        }
+      </section>
+
+      <aside>
+        <div class="side-block">
+          <h2>Browse by topic</h2>
+          <ul class="topic-list">
+            {
+              topics.map((topic) => (
+                <li>
+                  <a class="chip" href={url(`/topics/${topic.slug}/`)}>
+                    {topic.name}
+                    <span>{topic.count}</span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="side-block">
+          <h2>Follow along</h2>
+          <p>
+            Each new book arrives as one long article. Add the RSS feed to your reader and new
+            articles will show up when they are published.
+          </p>
+          <a class="btn btn-quiet" href={url('/rss.xml')}>Subscribe by RSS</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</Base>

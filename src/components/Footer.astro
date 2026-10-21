@@ -1,0 +1,33 @@
+---
+import { site } from '../data/site';
+import { getActiveTopics } from '../lib/books';
+import { url } from '../lib/paths';
+
+const topics = await getActiveTopics();
+---
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-about">
+      <a class="brand" href={url('/')}>{site.name}</a>
+      <p>{site.description}</p>
+    </div>
+    <nav aria-label="Topics">
+      <h2 class="footer-head">Topics</h2>
+      <ul>
+        {topics.map((topic) => (
+          <li><a href={url(`/topics/${topic.slug}/`)}>{topic.name}</a></li>
+        ))}
+      </ul>
+    </nav>
+    <nav aria-label="Site">
+      <h2 class="footer-head">Site</h2>
+      <ul>
+        <li><a href={url('/library/')}>Library</a></li>
+        <li><a href={url('/search/')}>Search</a></li>
+        <li><a href={url('/about/')}>About</a></li>
+        <li><a href={url('/rss.xml')}>RSS feed</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>

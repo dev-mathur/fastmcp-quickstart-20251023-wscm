@@ -1,0 +1,43 @@
+---
+import Base from '../../layouts/Base.astro';
+import BookRow from '../../components/BookRow.astro';
+import { getActiveTopics, getBooks } from '../../lib/books';
+import { url } from '../../lib/paths';
+
+export async function getStaticPaths() {
+  const topics = await getActiveTopics();
+  return topics.map((topic) => ({ params: { slug: topic.slug }, props: { topic } }));
+}
+
+const { topic } = Astro.props;
+const allTopics = await getActiveTopics();
+const books = (await getBooks()).filter((book) => book.data.topic === topic.slug);
+---
+
+<Base title={topic.name} description={topic.description}>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>{topic.name}</h1>
+      <p>{topic.description}</p>
+    </header>
+
+    <nav class="filter-bar" aria-label="Filter by topic">
+      <a class="chip" href={url('/library/')}>All</a>
+      {
+        allTopics.map((other) => (
+          <a
+            class="chip"
+            href={url(`/topics/${other.slug}/`)}
+            aria-current={other.slug === topic.slug ? 'page' : undefined}
+          >
+            {other.name}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="topic-rows">
+      {books.map((book) => <BookRow book={book} showTopic={false} />)}
+    </div>
+  </div>
+</Base>

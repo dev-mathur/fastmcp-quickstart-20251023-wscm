@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import BookCard from '../components/BookCard.astro';
+import { getActiveTopics, getBooks } from '../lib/books';
+import { url } from '../lib/paths';
+
+const books = await getBooks();
+const topics = await getActiveTopics();
+---
+
+<Base title="Library" description="Every book on DevStack, newest first.">
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Library</h1>
+      <p>{books.length} {books.length === 1 ? 'book' : 'books'}, each read closely and written up as one article.</p>
+    </header>
+
+    <nav class="filter-bar" aria-label="Filter by topic">
+      <a class="chip" href={url('/library/')} aria-current="page">All</a>
+      {
+        topics.map((topic) => (
+          <a class="chip" href={url(`/topics/${topic.slug}/`)}>{topic.name}</a>
+        ))
+      }
+    </nav>
+
+    {
+      books.length > 0 ? (
+        <div class="grid">
+          {books.map((book) => (
+            <BookCard book={book} />
+          ))}
+        </div>
+      ) : (
+        <p class="empty">No books yet.</p>
+      )
+    }
+  </div>
+</Base>
